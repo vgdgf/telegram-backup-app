@@ -1,9 +1,22 @@
-      - name: Grant execute permission for gradlew
+name: Build Web App
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install and Build
         run: |
-          cd app 
-          chmod +x gradlew
-
-      - name: Build with Gradle
-        run: |
-          cd app
-          ./gradlew assembleDebug
+          npm install
+          npm run build
+      - name: Upload Build Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/ # أو dist/ حسب إعدادات مشروعك
